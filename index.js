@@ -390,7 +390,7 @@ async function getOrCreateChannelWebhook(channel) {
 
   // Otherwise, create a new webhook
   return channel.createWebhook({
-    name: '4chan Attach Bot Webhook',
+    name: 'EphemeralLinksReuploader Bot Webhook',
   });
 }
 
