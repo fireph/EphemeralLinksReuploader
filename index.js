@@ -1,6 +1,7 @@
 const {
   Client,
   GatewayIntentBits,
+  GuildPremiumTier,
   MessageFlags,
   Partials,
   REST,
@@ -21,9 +22,6 @@ if (!DISCORD_TOKEN) {
   console.error('Error: DISCORD_TOKEN is not set.');
   process.exit(1);
 }
-
-// 10MB in bytes
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 let rootDirectory;
 if (os.platform() === 'win32') {
@@ -64,6 +62,18 @@ const DEFAULT_GUILD_CONFIG = {
   allowedDomains: ['4cdn.org'],
   allowedExtensions: ['.jpg', '.jpeg', '.png', '.gif', '.webm', '.mp4'],
 };
+
+function getMaxUploadSize(guild) {
+  switch (guild.premiumTier) {
+    case GuildPremiumTier.Tier2:
+      return 50 * 1024 * 1024;  // 50 MB
+    case GuildPremiumTier.Tier3:
+      return 100 * 1024 * 1024; // 100 MB
+    default:
+      // Tier 0 or 1
+      return 10 * 1024 * 1024;  // 10 MB
+  }
+}
 
 // Load the entire JSON file (with all guild configs) from disk
 function loadGlobalConfig() {
@@ -283,6 +293,8 @@ client.on('messageCreate', async (message) => {
   const globalConfig = loadGlobalConfig();
   const guildConfig = getGuildConfig(globalConfig, guildId);
 
+  const maxUploadSize = getMaxUploadSize(message.guild);
+
   // Regex to catch multiple links
   const urlRegex = /(https?:\/\/[^\s]+)/gi;
   const allLinks = message.content.match(urlRegex);
@@ -322,7 +334,7 @@ client.on('messageCreate', async (message) => {
       }
 
       // If file size is bigger than 10MB, skip reupload
-      if (contentLength > MAX_FILE_SIZE) {
+      if (contentLength > maxUploadSize) {
         throw new Error(`Skipping reupload. File size is too large: ${contentLength} bytes`);
       }
 
@@ -340,7 +352,7 @@ client.on('messageCreate', async (message) => {
       const fileStats = fs.statSync(tempFilename);
 
       // Double-check the file size just in case HEAD was inaccurate
-      if (fileStats.size > MAX_FILE_SIZE) {
+      if (fileStats.size > maxUploadSize) {
         throw new Error(`Downloaded file is over 10MB, skipping reupload: ${fileStats.size} bytes`);
       }
 
