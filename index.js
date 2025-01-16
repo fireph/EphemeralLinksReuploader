@@ -169,9 +169,10 @@ client.once('ready', async () => {
       body: commands,
     });
     console.log(`Slash commands registered to guild ${GUILD_ID}.`);
+  } else {
+    await rest.put(Routes.applicationCommands(client.user.id), { body: commands });
+    console.log('Slash commands registered globally.');
   }
-  await rest.put(Routes.applicationCommands(client.user.id), { body: commands });
-  console.log('Slash commands registered globally.');
 });
 
 // --------------------
