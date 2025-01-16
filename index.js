@@ -14,6 +14,7 @@ const os = require('os');
 
 // Load environment variables
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+const GUILD_ID = process.env.GUILD_ID; // For quick slash-command registration in a test guild (optional)
 
 if (!DISCORD_TOKEN) {
   console.error('Error: DISCORD_TOKEN is not set.');
@@ -162,6 +163,12 @@ client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
   const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN);
+  if (GUILD_ID) {
+    await rest.put(Routes.applicationGuildCommands(client.user.id, GUILD_ID), {
+      body: commands,
+    });
+    console.log(`Slash commands registered to guild ${GUILD_ID}.`);
+  }
   await rest.put(Routes.applicationCommands(client.user.id), { body: commands });
   console.log('Slash commands registered globally.');
 });
