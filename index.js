@@ -1,6 +1,7 @@
 const {
   Client,
   GatewayIntentBits,
+  MessageFlags,
   Partials,
   REST,
   Routes,
@@ -184,7 +185,7 @@ client.on('interactionCreate', async (interaction) => {
   if (!guildId) {
     return interaction.reply({
       content: 'This command only works in a guild channel.',
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
     });
   }
 
@@ -194,7 +195,7 @@ client.on('interactionCreate', async (interaction) => {
   const guildConfig = getGuildConfig(globalConfig, guildId);
 
   // Helper to respond ephemeral
-  const replyEphemeral = (msg) => interaction.reply({ content: msg, ephemeral: true });
+  const replyEphemeral = (msg) => interaction.reply({ content: msg, flags: MessageFlags.Ephemeral });
 
   switch (commandName) {
     case 'allowdomain': {
