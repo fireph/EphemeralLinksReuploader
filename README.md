@@ -8,6 +8,9 @@ services:
     image: dungfu/ephemeral-links-reuploader:latest
     container_name: my-discord-bot
     restart: unless-stopped
+    volumes:
+      - /home/example/config:/config
+      - /home/example/temp:/temp
     environment:
       - DISCORD_TOKEN=YOUR_DISCORD_BOT_TOKEN
 ```
