@@ -10,5 +10,4 @@ services:
     restart: unless-stopped
     environment:
       - DISCORD_TOKEN=YOUR_DISCORD_BOT_TOKEN
-      - CDN_DOMAINS=4cdn.org,cdn.example.com
 ```

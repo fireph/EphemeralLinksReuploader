@@ -1,5 +1,5 @@
 # 1) Base image
-FROM node:18-slim
+FROM node:slim
 
 # 2) Create app directory
 WORKDIR /app
