@@ -297,16 +297,20 @@ client.on('messageCreate', async (message) => {
 
   // Regex to catch multiple links
   const urlRegex = /(https?:\/\/[^\s]+)/gi;
-  const allLinks = message.content.match(urlRegex);
-  if (!allLinks) return; // No links found
+  const matches = Array.from(message.content.matchAll(urlRegex));
+  if (matches.length === 0) return; // No links found
 
   let newContent = message.content;
   let newFiles = [];
   let filesToDelete = [];
   let replacedAtLeastOneLink = false;
 
-  for (const link of allLinks) {
+  // Process matches in reverse order to maintain correct indices
+  for (const match of matches.reverse()) {
     try {
+      const link = match[0];
+      const start = match.index;
+      const end = match.index + match[0].length;
       const parsed = new URL(link.toLowerCase());
       const host = parsed.host; // e.g. i.4cdn.org
       const parts = host.split('.');
@@ -357,8 +361,8 @@ client.on('messageCreate', async (message) => {
         throw new Error(`Downloaded file is over 10MB, skipping reupload: ${fileStats.size} bytes`);
       }
 
-      // Remove the link text from the original message content
-      newContent = newContent.replace(link, `<${link}>`);
+      // Replace the link text with bracketed version at exact position
+      newContent = newContent.slice(0, start) + `<${link}>` + newContent.slice(end);
 
       // Add file to list of files that will be attached to message
       newFiles.push(tempFilename);
