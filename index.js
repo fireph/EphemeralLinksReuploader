@@ -301,8 +301,9 @@ client.on('messageCreate', async (message) => {
   if (!allLinks) return; // No links found
 
   let newContent = message.content;
-  let newFiles = []
-  let filesToDelete = []
+  let newFiles = [];
+  let filesToDelete = [];
+  let replacedAtLeastOneLink = false;
 
   for (const link of allLinks) {
     try {
@@ -357,29 +358,34 @@ client.on('messageCreate', async (message) => {
       }
 
       // Remove the link text from the original message content
-      newContent = newContent.replace(link, '').trim();
+      newContent = newContent.replace(link, `<${link}>`);
 
       // Add file to list of files that will be attached to message
       newFiles.push(tempFilename);
+
+      // Make sure to only delete/remake message when we actually do something
+      replacedAtLeastOneLink = true;
     } catch (error) {
       console.error('Error handling link:', error);
     }
   }
 
   try {
-    // Delete original message (needs Manage Messages permission)
-    await message.delete().catch((err) => {
-      console.warn('Could not delete original message:', err);
-    });
+    if (replacedAtLeastOneLink) {
+      // Delete original message (needs Manage Messages permission)
+      await message.delete().catch((err) => {
+        console.warn('Could not delete original message:', err);
+      });
 
-    // Re-post as a webhook (impersonate user)
-    const webhook = await getOrCreateChannelWebhook(message.channel);
-    await webhook.send({
-      username: message.member?.nickname || message.author.username,
-      avatarURL: message.author.displayAvatarURL({ format: 'png' }),
-      content: newContent,
-      files: newFiles,
-    });
+      // Re-post as a webhook (impersonate user)
+      const webhook = await getOrCreateChannelWebhook(message.channel);
+      await webhook.send({
+        username: message.member?.nickname || message.author.username,
+        avatarURL: message.author.displayAvatarURL({ format: 'png' }),
+        content: newContent,
+        files: newFiles,
+      });
+    }
   } catch (error) {
     console.error('Error handling message:', error);
   } finally {
