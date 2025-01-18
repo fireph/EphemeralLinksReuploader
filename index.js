@@ -13,6 +13,7 @@ const { finished } = require('stream/promises');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const http = require('http');
 
 // Load environment variables
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
