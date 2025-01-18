@@ -67,9 +67,6 @@ const DEFAULT_GUILD_CONFIG = {
   allowedExtensions: ['.jpg', '.jpeg', '.png', '.gif', '.webm', '.mp4'],
 };
 
-// A simple boolean flag to indicate if the bot is "ready"
-let botIsReady = false;
-
 function getMaxUploadSize(guild) {
   switch (guild.premiumTier) {
     case GuildPremiumTier.Tier2:
@@ -179,7 +176,6 @@ const client = new Client({
 // On startup, register slash commands
 client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  botIsReady = true;
 
   const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN);
   if (GUILD_ID) {
@@ -430,10 +426,10 @@ client.login(DISCORD_TOKEN);
 http
   .createServer((req, res) => {
     if (req.url === '/health') {
-      if (botIsReady) {
+      if (client.isReady()) {
         // The bot is up and running
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ status: 'UP', bot: client.user.tag }));
+        res.end(JSON.stringify({ status: 'HEALTHY', bot: client.user.tag }));
       } else {
         // The bot hasn't finished startup or had a login error
         res.writeHead(503, { 'Content-Type': 'application/json' });
