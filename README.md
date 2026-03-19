@@ -7,7 +7,7 @@
 
   ![Docker Pulls](https://img.shields.io/docker/pulls/dungfu/ephemeral-links-reuploader)
   ![Docker Image Size](https://img.shields.io/docker/image-size/dungfu/ephemeral-links-reuploader/latest)
-  ![License](https://img.shields.io/github/license/Freddiegar/EphemeralLinksReuploader)
+  ![License](https://img.shields.io/github/license/fireph/EphemeralLinksReuploader)
 </div>
 
 ---
