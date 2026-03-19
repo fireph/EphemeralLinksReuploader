@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="80 80 350 350">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="69 66 370 370">
 
   <defs>
     <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -19,7 +19,7 @@
     </filter>
   </defs>
 
-  <rect x="80" y="80" width="350" height="350"  fill="#1a2a2f" />
+  <rect x="69" y="66" width="370" height="370"  fill="#1a2a2f" />
 
   <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" stroke="none">
     <path fill="url(#goldGradient)" filter="url(#glow)" fill-rule="evenodd" d="M2621 4178 c9 -7 35 -38 60 -68 24 -30 92 -112 151 -182 86 -101 108
