@@ -24,6 +24,18 @@ The content remains accessible even after the original source goes offline or ex
 
 ---
 
+## Prerequisites
+
+You'll need to create a Discord application and bot to get your token:
+
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
+2. Click **New Application**, give it a name, and save
+3. Navigate to the **Bot** tab and click **Add Bot**
+4. Under the bot's username, click **Reset Token** to reveal your `DISCORD_TOKEN`
+5. Invite the bot to your server using the **OAuth2 > URL Generator** tab (select the `bot` scope and any required permissions)
+
+---
+
 ## Quick Start
 
 ### Docker Compose
